@@ -139,7 +139,13 @@ header {
     padding: 0 0 2px;
     overflow-x: auto;
     scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
 }
+.chips.scrolling { scrollbar-color: var(--drawdy-muted-foreground, #888) transparent; }
+.chips::-webkit-scrollbar { height: 4px; }
+.chips::-webkit-scrollbar-track { background: transparent; }
+.chips::-webkit-scrollbar-thumb { background: transparent; border-radius: 999px; }
+.chips.scrolling::-webkit-scrollbar-thumb { background: var(--drawdy-muted-foreground, #888); }
 .chip {
     flex: none;
     padding: 3px 9px;
@@ -387,6 +393,25 @@ main {
     var recentWrap = document.getElementById("recent-wrap");
     var searchEl = document.getElementById("search");
     var chipsEl = document.getElementById("chips");
+    var chipsScrollTimer = null;
+    chipsEl.addEventListener("scroll", function () {
+        chipsEl.classList.add("scrolling");
+        if (chipsScrollTimer !== null) clearTimeout(chipsScrollTimer);
+        chipsScrollTimer = setTimeout(function () {
+            chipsEl.classList.remove("scrolling");
+            chipsScrollTimer = null;
+        }, 800);
+    });
+    chipsEl.addEventListener(
+        "wheel",
+        function (event) {
+            if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+            if (chipsEl.scrollWidth <= chipsEl.clientWidth) return;
+            event.preventDefault();
+            chipsEl.scrollLeft += event.deltaY;
+        },
+        { passive: false }
+    );
     var sizeButtons = Array.prototype.slice.call(document.querySelectorAll("[data-size]"));
     var strokeButtons = Array.prototype.slice.call(document.querySelectorAll("[data-stroke]"));
     var colorButtons = Array.prototype.slice.call(document.querySelectorAll("[data-color]"));
