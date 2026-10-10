@@ -21,8 +21,11 @@ export type InsertSpot = {
 export type LabelSpot = {
     x: number;
     y: number;
+    width: number;
     fontSize: number;
 };
+
+const LABEL_EM_PER_CHAR = 0.8;
 
 export function labelFontSize(size: number): number {
     return Math.max(14, Math.round(size * 0.22));
@@ -70,10 +73,16 @@ export function labelSpot(
     iconBottom: number
 ): LabelSpot {
     const fontSize = labelFontSize(size);
-    const estimatedWidth = title.length * fontSize * 0.55;
+    // The board sets labels in its handwriting font, which the extension
+    // cannot measure, so the box is wider than any title needs and the board
+    // centres the text inside it.
+    const width = Math.ceil(
+        title.length * fontSize * LABEL_EM_PER_CHAR + fontSize
+    );
     return {
-        x: centreX - estimatedWidth / 2,
+        x: centreX - width / 2,
         y: iconBottom + Math.round(fontSize * 0.5),
+        width,
         fontSize,
     };
 }

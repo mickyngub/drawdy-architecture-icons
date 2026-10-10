@@ -304,10 +304,12 @@ async function addIcon(
         },
     };
     const top = centreY - finished.height / 2;
+    const groupId = options.label ? driver.generateId() : undefined;
     const elements: DrawdyElementSchema[] = [
         {
             type: "image",
             drawdyElementId: driver.generateId(),
+            groupId,
             url: toSvgDataUrl(finished.svg),
             x: centreX - finished.width / 2,
             y: top,
@@ -326,9 +328,11 @@ async function addIcon(
         elements.push({
             type: "text",
             drawdyElementId: driver.generateId(),
+            groupId,
             text: icon.title,
             x: spot.x,
             y: spot.y,
+            width: spot.width,
             fontSize: spot.fontSize,
             textAlign: "center",
             color: isMonochrome(icon) ? color : ink,

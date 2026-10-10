@@ -19,7 +19,7 @@ Sketch a system diagram in minutes. Architecture Icons puts cloud, database and 
 ## Options
 
 - **Size**: S, M, L or XL, from 32 to 256 board units.
-- **Label**: the icon's name under it. On by default.
+- **Label**: the icon's name, centred under it. On by default, and the icon and its label are grouped so they move together.
 - **Line weight** (Thin, Regular, Bold) and **Colour** for the outline icons in Diagram and All. Logos keep their own brand colours.
 
 ## Tips

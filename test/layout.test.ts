@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { nextInsertSpot, type InsertSpot } from "../src/layout";
+import { labelSpot, nextInsertSpot, type InsertSpot } from "../src/layout";
 
 const VIEW = { x: 0, y: 0, width: 1000, height: 800 };
 
@@ -38,4 +38,17 @@ test("a run wraps to a second row, a label line lower when labels are on", () =>
 
     const unlabelled = clicks(7, false);
     assert.deepEqual([unlabelled.x, unlabelled.y], [500, 480]);
+});
+
+test("a label box is centred under its icon and roomy enough not to wrap", () => {
+    for (const [title, size] of [
+        ["Cloudflare", 64],
+        ["Go", 32],
+        ["Amazon Simple Queue Service", 256],
+    ] as const) {
+        const spot = labelSpot(title, size, 500, 532);
+        assert.equal(spot.x + spot.width / 2, 500);
+        assert.ok(spot.width >= title.length * spot.fontSize * 0.8);
+        assert.equal(spot.y, 532 + Math.round(spot.fontSize * 0.5));
+    }
 });
