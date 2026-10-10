@@ -1,7 +1,7 @@
 {
     "driverId": "mickyngub.architecture-icons",
     "driverName": "Architecture Icons",
-    "driverVersion": "1.0.1",
+    "driverVersion": "1.0.2",
     "description": "Icons for architecture and system diagrams. Lucide building blocks plus the logos architects draw: cloud providers, every AWS service, databases, DevOps tools, languages, frameworks, AI and data tools, and messaging and APIs, in category chips with ranked search. Drag an icon onto the board or click to add it in view, where repeated clicks line up in rows. Each icon lands with a label like AWS Lambda or PostgreSQL, keeps its proportions and stays sharp when zoomed.",
     "icon": "icon.png",
     "main": "main.js",

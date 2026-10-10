@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+- a label sits centred under its icon, and an icon with a label is placed as one group, so the two move together
+
 ## 1.0.1
 
 - a clearer listing page: what the extension is for, how to use it, tips and privacy, in plain words
