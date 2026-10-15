@@ -2,6 +2,8 @@
 
 Sketch a system diagram in minutes. Architecture Icons puts cloud, database and service icons in a palette next to your Drawdy board: search, drag one out, and it lands with its name spelled the way diagrams spell it, such as AWS Lambda, PostgreSQL or Node.js.
 
+![Searching the palette for API Gateway, Lambda and Postgres, dragging each labelled logo onto the board and joining them with arrows](https://raw.githubusercontent.com/mickyngub/drawdy-architecture-icons/main/docs/media/architecture-icons.gif)
+
 ## What it's for
 
 - **System and architecture diagrams**: use the real service logos instead of drawing boxes and typing names.
