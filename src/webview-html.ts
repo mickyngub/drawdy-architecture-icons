@@ -1,3 +1,4 @@
+import { AZURE_ICONS } from "./azure-icons";
 import { CATEGORIES, titleFor } from "./catalog";
 import { iconifyBatchUrls, iconifySvg } from "./iconify";
 import { PANEL_CSS } from "./panel-css";
@@ -82,7 +83,7 @@ export const WEBVIEW_HTML = `<!doctype html>
     <div class="pt-3 text-center text-caption text-fg-subtle" id="count" hidden></div>
     <div class="flex justify-center"><button class="${SECONDARY} mt-2" id="more" type="button" hidden>Show more</button></div>
 </main>
-<footer class="flex-none border-t border-divider px-4 py-2 text-caption text-fg-subtle">Icons by Lucide, ISC. Logos from SVG Logos, CC0</footer>
+<footer class="flex-none border-t border-divider px-4 py-2 text-caption text-fg-subtle">Lucide ISC · SVG Logos CC0 · Google Cloud, Kubernetes Apache 2.0 · Azure © Microsoft</footer>
 <script>
 (function () {
     var api = acquireDrawdyApi();
@@ -92,6 +93,7 @@ export const WEBVIEW_HTML = `<!doctype html>
     var ICONIFY_HOST = "${ICONIFY_HOST}";
     var LOGOS_PREFIX = "${LOGOS_PREFIX}";
     var CATEGORIES = ${JSON.stringify(CATEGORIES)};
+    var AZURE_ICONS = ${JSON.stringify(AZURE_ICONS)};
     var iconifyBatchUrls = (${iconifyBatchUrls.toString()});
     var iconifySvg = (${iconifySvg.toString()});
     var titleFor = (${titleFor.toString()});
@@ -287,16 +289,21 @@ export const WEBVIEW_HTML = `<!doctype html>
             .replace(/\\son[a-z]+\\s*=\\s*'[^']*'/gi, "");
     }
 
+    function fetchSvg(icon) {
+        if (icon.source === "azure") {
+            var azure = Object.prototype.hasOwnProperty.call(AZURE_ICONS, icon.name) ? AZURE_ICONS[icon.name] : null;
+            return azure ? Promise.resolve(azure.svg) : Promise.reject(new Error("unknown Azure icon"));
+        }
+        return icon.source === "iconify" ? queueIconify(icon) : request(iconUrl(icon), readText);
+    }
+
     function loadSvg(icon) {
         var key = keyOf(icon);
         if (svgCache.has(key)) return Promise.resolve(svgCache.get(key));
         var inflight = svgPending.get(key);
         if (inflight) return inflight;
         if (svgFailed.has(key)) return Promise.reject(new Error("failed earlier"));
-        var fetched =
-            icon.source === "iconify"
-                ? queueIconify(icon)
-                : request(iconUrl(icon), readText);
+        var fetched = fetchSvg(icon);
         var promise = fetched
             .then(function (text) {
                 var clean = sanitizeSvg(text);
@@ -306,7 +313,7 @@ export const WEBVIEW_HTML = `<!doctype html>
             })
             .catch(function (error) {
                 svgPending.delete(key);
-                if (icon.source === "iconify") svgFailed.add(key);
+                if (icon.source !== "lucide") svgFailed.add(key);
                 throw error;
             });
         svgPending.set(key, promise);
@@ -332,7 +339,7 @@ export const WEBVIEW_HTML = `<!doctype html>
         var key = keyOf(icon);
         if (toneCache.has(key)) return toneCache.get(key);
         var tone = "";
-        if (icon.source === "iconify") {
+        if (icon.source !== "lucide") {
             toneProbe.innerHTML = svgText;
             var nodes = toneProbe.querySelectorAll("path, circle, rect, ellipse, polygon, polyline, line, text, stop");
             var darkest = 256;
@@ -532,14 +539,14 @@ export const WEBVIEW_HTML = `<!doctype html>
         return tile;
     }
 
-    function makeEntry(source, name, short, extra) {
-        var title = titleFor(short);
+    function makeEntry(source, name, short, extra, title) {
+        var label = title || titleFor(short);
         var nameKey = short.toLowerCase();
-        var titleKey = title.toLowerCase();
+        var titleKey = label.toLowerCase();
         return {
             source: source,
             name: name,
-            title: title,
+            title: label,
             nameKey: nameKey,
             titleKey: titleKey,
             words: (nameKey + " " + titleKey).split(/[\\s-]+/),
@@ -555,8 +562,9 @@ export const WEBVIEW_HTML = `<!doctype html>
         CATEGORIES.forEach(function (group) {
             var entries = group.names.map(function (name) {
                 if (group.source === "lucide") return makeEntry("lucide", name, name, "");
-                logoNames.add(name);
-                return makeEntry("iconify", LOGOS_PREFIX + ":" + name, name, "");
+                if (group.source === "azure") return makeEntry("azure", name, name, "", AZURE_ICONS[name].title);
+                if (group.source === "logos") logoNames.add(name);
+                return makeEntry("iconify", group.source + ":" + name, name, "");
             });
             if (group.source === "lucide") lucide = lucide.concat(entries);
             byCategory[group.id] = entries;
@@ -721,7 +729,7 @@ export const WEBVIEW_HTML = `<!doctype html>
     }
 
     function retryFailedTiles() {
-        var stem = "iconify:" + LOGOS_PREFIX + ":";
+        var stem = "iconify:";
         Array.from(svgFailed).forEach(function (key) {
             if (key.indexOf(stem) === 0) svgFailed.delete(key);
         });

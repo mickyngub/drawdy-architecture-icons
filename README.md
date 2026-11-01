@@ -7,14 +7,14 @@ Sketch a system diagram in minutes. Architecture Icons puts cloud, database and 
 ## What it's for
 
 - **System and architecture diagrams**: use the real service logos instead of drawing boxes and typing names.
-- **Cloud designs**: every AWS service has its own category, next to the other cloud providers.
+- **Cloud designs**: every AWS service has its own category, and the core Google Cloud (GCP), Azure and Kubernetes services have theirs, next to the other cloud providers. Labels follow each cloud's own spelling, such as BigQuery, Pub/Sub or Azure Cosmos DB.
 - **Tech stack overviews**: databases, DevOps tools, languages, frameworks, AI and data tools, and messaging and API services in one place.
 - **Live whiteboarding**: search, drag, done. Each icon brings its label with it, so the diagram reads on its own.
 
 ## How to use
 
 1. Click the **Architecture Icons** button on the right of the board.
-2. Pick a category: **All**, **Diagram** (servers, databases, users, queues, networks), **Cloud**, **AWS**, **Databases**, **DevOps**, **Languages**, **Frameworks**, **AI & data** or **Messaging & APIs**. Or type in the search box; press `/` to jump to it.
+2. Pick a category: **All**, **Diagram** (servers, databases, users, queues, networks), **Cloud**, **AWS**, **GCP**, **Azure**, **Kubernetes**, **Databases**, **DevOps**, **Languages**, **Frameworks**, **AI & data** or **Messaging & APIs**. Or type in the search box; press `/` to jump to it.
 3. Drag an icon onto the board and let go where you want it. Or click it to add it in the middle of your view; more clicks line icons up in rows instead of stacking them.
 4. In the search box, press Enter to add the top result.
 
@@ -32,10 +32,17 @@ Sketch a system diagram in minutes. Architecture Icons puts cloud, database and 
 
 ## Privacy
 
-- The icons download as you browse: outline icons from jsDelivr, logos from the Iconify API. Nothing you draw or type is sent anywhere.
+- The icons download as you browse: outline icons from jsDelivr, logos, Google Cloud and Kubernetes icons from the Iconify API; Azure icons are built in. Nothing you draw or type is sent anywhere.
 - Your recent icons and options are saved in this browser, so they are the same on every board you open here.
 
-## Credits and licence
+## Third-party icons
 
-- Outline icons by [Lucide](https://lucide.dev) (ISC). Logos from [SVG Logos](https://github.com/gilbarbara/logos) (CC0); each logo is a trademark of its owner.
-- The extension's code is [MIT](https://github.com/mickyngub/drawdy-architecture-icons/blob/main/LICENSE). Building it yourself? See [DEVELOPMENT.md](https://github.com/mickyngub/drawdy-architecture-icons/blob/main/DEVELOPMENT.md).
+The extension's code is MIT. The icons are not:
+
+- Outline icons: Lucide (ISC). Logos: SVG Logos (CC0). Google Cloud icons: Apache 2.0. Kubernetes icons: Apache 2.0.
+- Azure icons in `src/azure-icons.ts` are © Microsoft, used under Microsoft's icon terms
+  (diagrams, training and documentation only; don't crop, rotate or distort them).
+
+Microsoft's icon terms are on the [Azure architecture icons](https://learn.microsoft.com/en-us/azure/architecture/icons/) page. Lucide is at [lucide.dev](https://lucide.dev) and SVG Logos at [github.com/gilbarbara/logos](https://github.com/gilbarbara/logos); each logo is a trademark of its owner.
+
+The code's licence is in [LICENSE](https://github.com/mickyngub/drawdy-architecture-icons/blob/main/LICENSE). Building it yourself? See [DEVELOPMENT.md](https://github.com/mickyngub/drawdy-architecture-icons/blob/main/DEVELOPMENT.md).

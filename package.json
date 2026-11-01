@@ -12,6 +12,7 @@
         "test": "tsx --test test/*.test.ts",
         "typecheck": "tsc --noEmit",
         "check-logos": "node scripts/check-logos.mjs",
+        "build-azure": "node scripts/build-azure.mjs",
         "preflight": "node scripts/preflight.mjs"
     },
     "devDependencies": {

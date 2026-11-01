@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
+import { AZURE_ICONS } from "../src/azure-icons";
 import type { IconPick } from "../src/shared/messages";
-import { finalizeIconSvg, type SvgOptions } from "../src/svg";
+import { finalizeIconSvg, isMonochrome, type SvgOptions } from "../src/svg";
 
 const LUCIDE = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18"/></svg>`;
 const LOGO = `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 153"><path fill="#f90" d="M0 0h256v153H0z"/></svg>`;
@@ -70,4 +71,42 @@ test("scripts, event handlers, comments and the XML declaration are stripped", (
     assert.ok(!svg.includes("<!--"));
     assert.ok(!svg.includes("<?xml"));
     assert.match(svg, /<path\s+d="M0 0h24"\/>/);
+});
+
+test("an azure icon keeps its viewBox, colours and proportions", () => {
+    const source = AZURE_ICONS["virtual-machine"].svg;
+    const azure: IconPick = {
+        source: "azure",
+        name: "virtual-machine",
+        title: "Azure Virtual Machines",
+        svg: source,
+    };
+    const { svg, width, height } = finish(azure);
+
+    const viewBox = /\sviewBox="([^"]*)"/.exec(source)?.[1] ?? "";
+    assert.equal(/\sviewBox="([^"]*)"/.exec(rootTag(svg))?.[1], viewBox);
+
+    const paints = source.match(/(?:fill|stop-color)="#[0-9a-fA-F]+"/g) ?? [];
+    assert.ok(paints.length > 0, "the source has no hex paints to compare");
+    for (const paint of paints) {
+        assert.ok(svg.includes(paint), `lost ${paint}`);
+    }
+    assert.ok(!svg.includes(OPTIONS.color));
+
+    const withCurrentColor = finish({
+        ...azure,
+        svg: source.replace("</svg>", '<path stroke="currentColor"/></svg>'),
+    }).svg;
+    assert.ok(withCurrentColor.includes('stroke="currentColor"'));
+    assert.ok(!withCurrentColor.includes(OPTIONS.color));
+
+    const [, , boxWidth, boxHeight] = viewBox.split(/\s+/).map(Number);
+    assert.equal(width / height, boxWidth / boxHeight);
+    assert.equal(
+        Number(/ width="([^"]*)"/.exec(rootTag(svg))?.[1]) /
+            Number(/ height="([^"]*)"/.exec(rootTag(svg))?.[1]),
+        boxWidth / boxHeight
+    );
+
+    assert.equal(isMonochrome(azure), false);
 });

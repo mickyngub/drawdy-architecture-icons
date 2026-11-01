@@ -66,3 +66,39 @@ test("readState drops recent icons from removed sources and other sets", () => {
     });
     assert.deepEqual(state.recent, kept);
 });
+
+test("readState keeps gcp iconify refs and 1.0.4 refs", () => {
+    const recent = [
+        { source: "iconify", name: "gcp:bigquery", title: "BigQuery" },
+        { source: "iconify", name: "logos:aws-lambda", title: "AWS Lambda" },
+        { source: "lucide", name: "server", title: "Server" },
+    ];
+    assert.deepEqual(readState({ recent }).recent, recent);
+});
+
+test("readState keeps k8s iconify refs", () => {
+    const recent = [{ source: "iconify", name: "k8s:pod", title: "Pod" }];
+    assert.deepEqual(readState({ recent }).recent, recent);
+});
+
+test("readState drops an unknown iconify prefix", () => {
+    const state = readState({
+        recent: [{ source: "iconify", name: "foo:bar", title: "x" }],
+    });
+    assert.deepEqual(state.recent, []);
+});
+
+test("readState keeps a known azure ref beside a lucide one with the same name", () => {
+    const recent = [
+        { source: "azure", name: "monitor", title: "Azure Monitor" },
+        { source: "lucide", name: "monitor", title: "Monitor" },
+    ];
+    assert.deepEqual(readState({ recent }).recent, recent);
+});
+
+test("readState drops an unknown azure slug", () => {
+    const state = readState({
+        recent: [{ source: "azure", name: "not-a-service", title: "x" }],
+    });
+    assert.deepEqual(state.recent, []);
+});

@@ -1,4 +1,4 @@
-export type IconSource = "lucide" | "iconify";
+export type IconSource = "lucide" | "iconify" | "azure";
 
 export type IconRef = {
     source: IconSource;

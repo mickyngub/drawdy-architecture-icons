@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.0
+
+- a GCP category of Google Cloud service icons, loaded from Iconify's gcp set
+- an Azure category of Azure service icons, built into the extension so they load instantly
+- a Kubernetes category with all 38 official Kubernetes icons, from pods and deployments to the API server and kubelet, loaded from Iconify's k8s set
+- labels spelled the way each cloud names its services, such as BigQuery, Pub/Sub, Azure Functions and Azure Cosmos DB
+
 ## 1.0.4
 
 - the panel now uses Drawdy's own colours and font and matches the other icon pickers: chips that scroll with a fade, size and style controls that show the selected option in grey instead of lime, and a search box with a glyph
